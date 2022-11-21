@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 
 @CrossOrigin
 @Slf4j
@@ -52,5 +53,16 @@ public class UserController {
         request.getSession().setAttribute("user", usr.getId());
 
         return R.success(usr);
+    }
+
+    @PostMapping("/register")
+    public R<String> register(HttpServletRequest request, @RequestBody User user) {
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+
+        userService.save(user);
+
+        return R.success("新增员工成功");
     }
 }
