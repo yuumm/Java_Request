@@ -36,6 +36,7 @@ public class RequestController {
         return R.success(pageInfo);
     }
 
+    // 根据id查询详细信息
     @GetMapping("/{id}")
     public R<Request> getRequestDetail(@PathVariable Long id) {
         log.info("根据id查询信息 {}", id);
@@ -48,6 +49,7 @@ public class RequestController {
         return R.success(request);
     }
 
+    // 根据id修改信息
     @PutMapping
     public R<String> updateRequestById(@RequestBody Request request) {
         Long requestId = (Long) request.getId();
@@ -56,4 +58,21 @@ public class RequestController {
         requestService.updateById(request);
         return R.success("信息编辑成功");
     }
+
+    @PostMapping("/save")
+    public  R<String> saveRequest(@RequestBody Request request) {
+        log.info("save request {}", request.getBackground());
+        requestService.save(request);
+        return R.success("添加成功");
+    }
+
+//    @PutMapping("/{id}")
+//    public R<String> deleteRequestById(@PathVariable Long id) {
+//        log.info("根据id删除信息 {}", id);
+//
+//        LambdaQueryWrapper<Request> queryWrapper = new LambdaQueryWrapper();
+//        queryWrapper.eq(Request::getId, id);
+//
+//        return null;
+//    }
 }

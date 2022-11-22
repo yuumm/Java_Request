@@ -18,7 +18,7 @@ public class Request implements Serializable {
 
     private String systemUse;
 
-    private LocalDateTime createTime;
+    private String createTime;
 
     private String background;
 
@@ -33,17 +33,19 @@ public class Request implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
 
-    private LocalDateTime requestTime;
+    private String requestTime;
 
     private Integer urgent;
 
     private Integer progress;
 
-    private LocalDateTime startTime;
+    private String startTime;
 
-    private LocalDateTime endTime;
+    private String endTime;
 
     private Integer completeStatus;
 
     private Integer takeStatus;
+
+    private Integer statusDelete;
 }
