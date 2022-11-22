@@ -9,10 +9,7 @@ import com.cim.request.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @Slf4j
@@ -39,4 +36,24 @@ public class RequestController {
         return R.success(pageInfo);
     }
 
+    @GetMapping("/{id}")
+    public R<Request> getRequestDetail(@PathVariable Long id) {
+        log.info("根据id查询信息 {}", id);
+        LambdaQueryWrapper<Request> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(Request::getId, id);
+        Request request = requestService.getOne(queryWrapper);
+        if (request == null) {
+            return R.error("查询失败");
+        }
+        return R.success(request);
+    }
+
+    @PutMapping
+    public R<String> updateRequestById(@RequestBody Request request) {
+        Long requestId = (Long) request.getId();
+        log.info("requestId {}", requestId);
+
+        requestService.updateById(request);
+        return R.success("信息编辑成功");
+    }
 }
