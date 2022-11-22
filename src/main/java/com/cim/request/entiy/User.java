@@ -30,10 +30,4 @@ public class User implements Serializable {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
-
-    @TableField(fill = FieldFill.INSERT)
-    private Long createUser;
-
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateUser;
 }
