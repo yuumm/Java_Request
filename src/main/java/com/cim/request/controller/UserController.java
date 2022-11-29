@@ -65,4 +65,12 @@ public class UserController {
 
         return R.success("新增员工成功");
     }
+
+    //mybatis测试
+    @GetMapping("/getUser/{id}")
+    public R<User> getUserId(@PathVariable Long id) {
+        User user = userService.getUserId(id);
+
+        return R.success(user);
+    }
 }

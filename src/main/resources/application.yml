@@ -17,6 +17,12 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
+#mybatis配置
+mybatis:
+  typeAliasesPackage: com.example.mybaitsxml.dao.entity
+  mapperLocations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 # ?????????????????????????????
 #reggie:
 #  path: /Users/liuxiaozheng/Desktop/Desktop/java/JavaProject/docTest/
