@@ -1,11 +1,10 @@
-package com.cim.request.entiy;
+package com.cim.request.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 public class Request implements Serializable {

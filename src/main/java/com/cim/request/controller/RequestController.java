@@ -3,12 +3,10 @@ package com.cim.request.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cim.request.common.R;
-import com.cim.request.entiy.Request;
+import com.cim.request.entity.Request;
 import com.cim.request.service.RequestService;
-import com.cim.request.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin

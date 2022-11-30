@@ -2,7 +2,7 @@ package com.cim.request.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cim.request.common.R;
-import com.cim.request.entiy.User;
+import com.cim.request.entity.User;
 import com.cim.request.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @CrossOrigin
 @Slf4j
@@ -67,9 +67,9 @@ public class UserController {
     }
 
     //mybatis测试
-    @GetMapping("/getUser/{id}")
-    public R<User> getUserId(@PathVariable Long id) {
-        User user = userService.getUserId(id);
+    @GetMapping("/getUser")
+    public R<List<User>> getUserId() {
+        List<User> user = userService.getUserId();
 
         return R.success(user);
     }

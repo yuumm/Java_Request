@@ -1,14 +1,13 @@
-package com.cim.request.entiy;
+package com.cim.request.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 // 用户实体
+@TableName(value = "User")
 @Data
 public class User implements Serializable {
     public static final long serialVersionUid = 1L;
