@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cim.request.common.R;
 import com.cim.request.entity.Request;
 import com.cim.request.service.RequestService;
+import com.cim.request.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -19,8 +21,14 @@ public class RequestController {
 
 //    需求分页查询。参数中page表示查询第几页的数据，pagesize表示每页多少条数据
     @GetMapping("/page")
-    public R<Page> page(int page, int pageSize, String query) {
+//    RequestHeader表示数据从header中获取，required表示该参数不是必须的
+    public R<Page> page(@RequestHeader(required = false)String token, int page, int pageSize) {
         log.info("page: {}, pageSize: {}", page, pageSize);
+//        增加token判断登录信息
+        if(StringUtil.isEmpty(token)) {
+            return R.error("没有权限访问");
+        }
+        log.info("token: {}", token);
 
         Page pageInfo = new Page(page, pageSize);
         LambdaQueryWrapper<Request> queryWrapper = new LambdaQueryWrapper();

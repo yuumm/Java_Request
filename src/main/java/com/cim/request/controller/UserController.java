@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cim.request.common.R;
 import com.cim.request.entity.User;
 import com.cim.request.service.UserService;
+import com.cim.request.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -49,12 +50,17 @@ public class UserController {
             return R.error("员工已禁用");
         }
 
-        // 6、登录成功，将员工id存入session
-        request.getSession().setAttribute("user", usr.getId());
+        // 6、登录成功，生成token，并将token存入session
+        //  根据username生成token
+        String token = JwtUtils.genJwtToken(user.getUsername());
+        //  将token存入session
+        request.getSession().setAttribute("token", token);
 
-        return R.success(usr);
+        // 返回数据，并将token添加到map中
+        return R.success(usr).add("token", token);
     }
 
+    // 注册用户
     @PostMapping("/register")
     public R<String> register(HttpServletRequest request, @RequestBody User user) {
         user.setCreateTime(LocalDateTime.now());
