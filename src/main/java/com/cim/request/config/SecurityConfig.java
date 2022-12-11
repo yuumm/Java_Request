@@ -1,0 +1,85 @@
+package com.cim.request.config;
+
+import com.cim.request.common.security.LoginFailureHandler;
+import com.cim.request.common.security.LoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+
+/*
+spring security配置
+ */
+@Configuration
+@EnableWebSecurity
+// 全局的方法配置，后期要用到对应的security的注解
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
+    private static final String URL_WHITELIST[] = {
+            "/login",
+            "/logout",
+            "/captcha",
+            "/password",
+            "/image/**",
+            "/test/**"
+    };
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // 开启跨域配置 以及关闭csrf攻击
+        http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
+
+        // 登录登出配置
+        .formLogin()
+                .successHandler(loginSuccessHandler)
+                .failureHandler(loginFailureHandler)
+//        .and().logout().logoutSuccessHandler()
+
+        // session禁用配置（因为是前后端分离，所以不用session）
+                // STATELESS表示无状态
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+        // 拦截规则配置
+                // URL_WHITELIST白名单 是一个数组
+                .and().authorizeRequests().antMatchers(URL_WHITELIST).permitAll()
+                // 其他需求需要认证
+                .anyRequest().authenticated();
+
+        // 异常处理配置
+
+        // 自定义过滤器配置
+    }
+
+    CorsConfigurationSource corsConfigurationSource(){
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        corsConfiguration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConfiguration);
+        return source;
+    }
+}
