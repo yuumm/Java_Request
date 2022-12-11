@@ -1,0 +1,3 @@
+# Java_Request
+SecurityVersionOne
+增加了Spring security。增加了security的配置文件，在security的配置文件中修改了解决同源跨域问题的方法。登录成功后生成token并返回给前端
