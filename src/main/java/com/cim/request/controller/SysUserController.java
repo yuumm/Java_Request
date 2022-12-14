@@ -2,8 +2,8 @@ package com.cim.request.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cim.request.common.R;
-import com.cim.request.entity.User;
-import com.cim.request.service.UserService;
+import com.cim.request.entity.SysUser;
+import com.cim.request.service.SysUserService;
 import com.cim.request.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +18,22 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class SysUserController {
     @Autowired
-    private UserService userService;
+    private SysUserService sysUserService;
 
     @PostMapping("/login")
     // 主要接收json格式，RequestBody可以将json格式的数据进行对应
     // 因为登录用户要保存部分数据到session以便查询是否登录，所以需要HttpServletRequest
-    public R<User> login(HttpServletRequest request, @RequestBody User user) {
+    public R<SysUser> login(HttpServletRequest request, @RequestBody SysUser sysUser) {
         // 1、密码进行md5加密
-        String password = user.getPassword();
+        String password = sysUser.getPassword();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         // 2、根据username到数据库中进行查询
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername, user.getUsername());
-        User usr = userService.getOne(queryWrapper);
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUsername, sysUser.getUsername());
+        SysUser usr = sysUserService.getOne(queryWrapper);
 
         // 3、查询失败直接返回失败
         if (usr == null) {
@@ -52,7 +52,7 @@ public class UserController {
 
         // 6、登录成功，生成token，并将token存入session
         //  根据username生成token
-        String token = JwtUtils.genJwtToken(user.getUsername());
+        String token = JwtUtils.genJwtToken(sysUser.getUsername());
         //  将token存入session
         request.getSession().setAttribute("token", token);
 
@@ -62,21 +62,21 @@ public class UserController {
 
     // 注册用户
     @PostMapping("/register")
-    public R<String> register(HttpServletRequest request, @RequestBody User user) {
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+    public R<String> register(HttpServletRequest request, @RequestBody SysUser sysUser) {
+        sysUser.setCreateTime(LocalDateTime.now());
+        sysUser.setUpdateTime(LocalDateTime.now());
+        sysUser.setPassword(DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes()));
 
-        userService.save(user);
+        sysUserService.save(sysUser);
 
         return R.success("新增员工成功");
     }
 
     //mybatis测试
     @GetMapping("/getUser")
-    public R<List<User>> getUserId() {
-        List<User> user = userService.getUserId();
+    public R<List<SysUser>> getUserId() {
+        List<SysUser> sysUser = sysUserService.getUserId();
 
-        return R.success(user);
+        return R.success(sysUser);
     }
 }

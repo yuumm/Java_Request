@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 // 用户实体
-@TableName(value = "User")
+@TableName(value = "sys_user")
 @Data
-public class User implements Serializable {
+public class SysUser implements Serializable {
     public static final long serialVersionUid = 1L;
 
     private Long id;

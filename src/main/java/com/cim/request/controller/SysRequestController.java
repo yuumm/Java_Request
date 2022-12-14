@@ -3,21 +3,20 @@ package com.cim.request.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cim.request.common.R;
-import com.cim.request.entity.Request;
-import com.cim.request.service.RequestService;
+import com.cim.request.entity.SysRequest;
+import com.cim.request.service.SysRequestService;
 import com.cim.request.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @Slf4j
 @RestController
 @RequestMapping("/request")
-public class RequestController {
+public class SysRequestController {
     @Autowired
-    private RequestService requestService;
+    private SysRequestService sysRequestService;
 
 //    需求分页查询。参数中page表示查询第几页的数据，pagesize表示每页多少条数据
     @GetMapping("/page")
@@ -31,44 +30,44 @@ public class RequestController {
         log.info("token: {}", token);
 
         Page pageInfo = new Page(page, pageSize);
-        LambdaQueryWrapper<Request> queryWrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper<SysRequest> queryWrapper = new LambdaQueryWrapper();
 //        if (query != null) {
 //            queryWrapper.like(Request::getId, query);
 //        }
-        queryWrapper.orderByDesc(Request::getCreateTime);
+        queryWrapper.orderByDesc(SysRequest::getCreateTime);
 
-        requestService.page(pageInfo, queryWrapper);
+        sysRequestService.page(pageInfo, queryWrapper);
         log.info("pageInfo: {}", pageInfo);
         return R.success(pageInfo);
     }
 
     // 根据id查询详细信息
     @GetMapping("/{id}")
-    public R<Request> getRequestDetail(@PathVariable Long id) {
+    public R<SysRequest> getRequestDetail(@PathVariable Long id) {
         log.info("根据id查询信息 {}", id);
-        LambdaQueryWrapper<Request> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.eq(Request::getId, id);
-        Request request = requestService.getOne(queryWrapper);
-        if (request == null) {
+        LambdaQueryWrapper<SysRequest> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysRequest::getId, id);
+        SysRequest sysRequest = sysRequestService.getOne(queryWrapper);
+        if (sysRequest == null) {
             return R.error("查询失败");
         }
-        return R.success(request);
+        return R.success(sysRequest);
     }
 
     // 根据id修改信息
     @PutMapping
-    public R<String> updateRequestById(@RequestBody Request request) {
-        Long requestId = (Long) request.getId();
+    public R<String> updateRequestById(@RequestBody SysRequest sysRequest) {
+        Long requestId = (Long) sysRequest.getId();
         log.info("requestId {}", requestId);
 
-        requestService.updateById(request);
+        sysRequestService.updateById(sysRequest);
         return R.success("信息编辑成功");
     }
 
     @PostMapping("/save")
-    public  R<String> saveRequest(@RequestBody Request request) {
-        log.info("save request {}", request.getBackground());
-        requestService.save(request);
+    public  R<String> saveRequest(@RequestBody SysRequest sysRequest) {
+        log.info("save request {}", sysRequest.getBackground());
+        sysRequestService.save(sysRequest);
         return R.success("添加成功");
     }
 
