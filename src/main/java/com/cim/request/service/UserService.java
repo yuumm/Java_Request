@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserService extends IService<User> {
     // mybatis测试
     public List<User> getUserId();
+
+    public User getByUsername(String username);
 }

@@ -2,8 +2,10 @@ package com.cim.request.config;
 
 import com.cim.request.common.security.LoginFailureHandler;
 import com.cim.request.common.security.LoginSuccessHandler;
+import com.cim.request.common.security.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +34,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private LoginSuccessHandler loginSuccessHandler;
     @Autowired
     private LoginFailureHandler loginFailureHandler;
+
+    // 用于实现查库的登录验证
+    @Autowired
+    private MyUserDetailsServiceImpl myUserDetailsService;
+
+    // 导入了密码加密的设置。必须导入，否则会报错
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     private static final String URL_WHITELIST[] = {
             "/login",
             "/logout",
@@ -42,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        // 实现自己配置登录登出功能
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Override
@@ -52,19 +67,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         // 登录登出配置
         .formLogin()
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginFailureHandler)
+        .successHandler(loginSuccessHandler)
+        .failureHandler(loginFailureHandler)
 //        .and().logout().logoutSuccessHandler()
 
         // session禁用配置（因为是前后端分离，所以不用session）
-                // STATELESS表示无状态
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        // STATELESS表示无状态
+        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         // 拦截规则配置
-                // URL_WHITELIST白名单 是一个数组
-                .and().authorizeRequests().antMatchers(URL_WHITELIST).permitAll()
-                // 其他需求需要认证
-                .anyRequest().authenticated();
+        // URL_WHITELIST白名单 是一个数组
+        .and().authorizeRequests().antMatchers(URL_WHITELIST).permitAll()
+        // 其他需求需要认证
+        .anyRequest().authenticated();
 
         // 异常处理配置
 

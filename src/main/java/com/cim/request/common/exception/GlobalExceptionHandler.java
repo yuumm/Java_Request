@@ -1,7 +1,8 @@
-package com.cim.request.common;
+package com.cim.request.common.exception;
 
 // 全局异常处理
 
+import com.cim.request.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
