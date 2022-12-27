@@ -8,6 +8,7 @@ import com.cim.request.service.SysRequestService;
 import com.cim.request.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -20,6 +21,8 @@ public class SysRequestController {
 
 //    需求分页查询。参数中page表示查询第几页的数据，pagesize表示每页多少条数据
     @GetMapping("/page")
+    // PreAuthorize判断是否拥有对应的权限，就是通过拼接的那个字符串进行判断
+//    @PreAuthorize("hasRole('ROLE_admin')")
 //    RequestHeader表示数据从header中获取，required表示该参数不是必须的
     public R<Page> page(@RequestHeader(required = false)String token, int page, int pageSize) {
         log.info("page: {}, pageSize: {}", page, pageSize);

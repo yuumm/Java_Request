@@ -15,7 +15,10 @@ import java.io.IOException;
 
 /*
 该class配置security中登录成功的情况
+对于springsecurity身份验证的流程可以查看：
+    https://longda.wang/post/3c7c656a.html
  */
+
 // 后面要注入到securityconfig中 component注解和bean注解类似
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -26,8 +29,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 返回使用outputstream
         ServletOutputStream outputStream = response.getOutputStream();
 
-        //先暂时根据user生成token
-        String username = "user";
+        // 根据username生成token
+        String username = authentication.getName();
         String token = JwtUtils.genJwtToken(username);
 
         // JSONUtil.toJsonStr可以将数据转换为json的字符串

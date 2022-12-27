@@ -10,4 +10,6 @@ public interface SysUserService extends IService<SysUser> {
     public List<SysUser> getUserId();
 
     public SysUser getByUsername(String username);
+
+    String getUserAuthorityInfo(Long userId);
 }

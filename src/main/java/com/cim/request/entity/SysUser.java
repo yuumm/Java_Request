@@ -9,10 +9,8 @@ import java.time.LocalDateTime;
 // 用户实体
 @TableName(value = "sys_user")
 @Data
-public class SysUser implements Serializable {
+public class SysUser extends BaseEntity implements Serializable {
     public static final long serialVersionUid = 1L;
-
-    private Long id;
 
     private String name;
 
@@ -22,11 +20,9 @@ public class SysUser implements Serializable {
 
     private String phone;
 
+    private LocalDateTime loginDate;
+
     private String sex;
 
     private Integer status;
-
-    private LocalDateTime createTime;
-
-    private LocalDateTime updateTime;
 }
