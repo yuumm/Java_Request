@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -65,5 +68,10 @@ public class SysMenu extends BaseEntity implements Serializable {
     @TableField(value = "perms")
     private String perms;
 
-
+    /*
+    因为左侧菜单栏是有层级结构的，因此左侧菜单栏需要一个能表示层级的变量，因此需要下述字段
+     */
+    // exist = false表示下面的字段不在数据库中进行映射
+    @TableField(exist = false)
+    private List<SysMenu> children = new ArrayList<>();
 }

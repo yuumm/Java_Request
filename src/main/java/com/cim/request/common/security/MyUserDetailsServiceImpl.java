@@ -2,6 +2,8 @@ package com.cim.request.common.security;
 
 import com.cim.request.common.exception.UserCountLockException;
 import com.cim.request.entity.SysUser;
+import com.cim.request.service.SysMenuService;
+import com.cim.request.service.SysRoleService;
 import com.cim.request.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     // 因为要查用户表，因此要用到UserService
     @Autowired
-    SysUserService sysUserService;
+    private SysUserService sysUserService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

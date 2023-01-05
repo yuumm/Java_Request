@@ -50,6 +50,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         /*
          inSql表示子查询。其中id表示子查询的内容
          具体的sql语句如下
+         sysRoleMapper.selectList是mybatisplus自带的一个查询方法
          select * from sys_role where id in (select role_id from sys_user_role where user_id=)
          */
         List<SysRole> roleList = sysRoleMapper.selectList(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where user_id="+userId));

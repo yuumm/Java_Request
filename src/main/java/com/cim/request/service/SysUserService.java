@@ -11,5 +11,5 @@ public interface SysUserService extends IService<SysUser> {
 
     public SysUser getByUsername(String username);
 
-    String getUserAuthorityInfo(Long userId);
+    public String getUserAuthorityInfo(Long userId);
 }

@@ -61,11 +61,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         // 需要创建范型让后面一个filter去进行认证
         String token = request.getHeader("token");
         log.info("请求地址：" + request.getRequestURI());
-        log.info("token: " + token);
+        log.info("token(JWT): " + token);
 
         // 当token为空或者URL_WHITELIST中包含了url，则直接放行
         if(StringUtil.isEmpty(token) || new ArrayList<String>(Arrays.asList(URL_WHITELIST)).contains(request.getRequestURI())) {
             chain.doFilter(request, response);
+            log.info("没有token");
             return;
         }
 
